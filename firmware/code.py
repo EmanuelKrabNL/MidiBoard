@@ -1,3 +1,4 @@
+# Based on Kai Pereira's repo, ChatGPT helped with code suggestions and edits, especially explaining how parts of code work since im a beginner in python. Thanks Kai!
 import keypad
 import random
 import touchio
@@ -18,13 +19,17 @@ from kmk.scanners.keypad import KeysScanner
 
 
 class TouchScanner(Scanner):
+class TouchInputScanner(Scanner):
     def __init__(self, pins):
         self.pads = [touchio.TouchIn(p) for p in pins]
         self.pressed = [False] * len(pins)
+        self.touch_inputs = [touchio.TouchIn(touch_pin) for touch_pin in pins]
+        self.touch_states = [False] * len(pins)
 
     @property
     def key_count(self):
         return len(self.pads)
+        return len(self.touch_inputs)
 
     def scan_for_changes(self):
         for i, pad in enumerate(self.pads):
@@ -32,6 +37,11 @@ class TouchScanner(Scanner):
             if touched != self.pressed[i]:
                 self.pressed[i] = touched
                 return keypad.Event(i + self.offset, touched)
+        for touch_index, touch_input in enumerate(self.touch_inputs):
+            is_touched = touch_input.value
+            if is_touched != self.touch_states[touch_index]:
+                self.touch_states[touch_index] = is_touched
+                return keypad.Event(touch_index + self.offset, is_touched)
 
 
 keyboard = KMKKeyboard()
@@ -87,7 +97,7 @@ keyboard.matrix = [
     TouchScanner([pin.GPIO13, pin.GPIO12, pin.GPIO11, pin.GPIO10, pin.GPIO9, pin.GPIO8, pin.GPIO7]),
     # Switches left, middle, right (keys 7-9)
     KeysScanner([pin.GPIO4, pin.GPIO5, pin.GPIO6], value_when_pressed=False, pull=True),
-    TouchScanner([pin.GPIO1, pin.GPIO2, pin.GPIO3, pin.GPIO4, pin.GPIO5, pin.GPIO6, pin.GPIO7]),
+    TouchInputScanner([pin.GPIO1, pin.GPIO2, pin.GPIO3, pin.GPIO4, pin.GPIO5, pin.GPIO6, pin.GPIO7]),
     KeysScanner([pin.GPIO44, pin.GPIO43, pin.GPIO13], value_when_pressed=False, pull=True),
 ]
 
