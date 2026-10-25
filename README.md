@@ -20,4 +20,9 @@ Ive also added lights cause why not!
 <img width="1377" height="768" alt="SchematicsMidiboard" src="https://github.com/user-attachments/assets/9d1ade43-c5cc-4bfa-b06e-8998b87861ad" />
 
 
+## Why have i made this?
+For my lil sis, *duhhh...*
+
+## What is its purpose?
+***insert musical sounds and off key piano notes being played by a grizzly bear***
 
